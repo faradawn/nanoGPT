@@ -5,19 +5,20 @@ import numpy as np
 
 # download the tiny shakespeare dataset
 input_file_path = os.path.join(os.path.dirname(__file__), 'input.txt')
-if not os.path.exists(input_file_path):
-    data_url = 'https://raw.githubusercontent.com/karpathy/char-rnn/master/data/tinyshakespeare/input.txt'
-    with open(input_file_path, 'w') as f:
-        f.write(requests.get(data_url).text)
-
 with open(input_file_path, 'r') as f:
     data = f.read()
+
 n = len(data)
 train_data = data[:int(n*0.9)]
 val_data = data[int(n*0.9):]
 
 # encode with tiktoken gpt2 bpe
 enc = tiktoken.get_encoding("gpt2")
+
+data_ids = enc.encode_ordinary(data)
+print(f"=== data char {len(data)}, data tokens {len(data_ids)}")
+print(data_ids)
+
 train_ids = enc.encode_ordinary(train_data)
 val_ids = enc.encode_ordinary(val_data)
 print(f"train has {len(train_ids):,} tokens")
